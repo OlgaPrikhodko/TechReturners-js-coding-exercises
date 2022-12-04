@@ -2,8 +2,10 @@
  * This function takes a number, e.g. 123 and returns the sum of all its digits, e.g 6 in this example.
  * @param {Number} n
  */
-export const sumDigits = (n) => {
+export const sumDigits = n => {
   if (n === undefined) throw new Error("n is required");
+  const sNum = ("" + n).replace(/[^0-9]/g, "");
+  return sNum.split("").reduce((sum, item) => sum + +item, 0);
 };
 
 /**
@@ -14,13 +16,14 @@ export const sumDigits = (n) => {
  * @param {Number} end
  * @param {Number} step
  */
-export const createRange = (start, end, step) => {
+export const createRange = (start, end, step = 1) => {
   if (start === undefined) throw new Error("start is required");
   if (end === undefined) throw new Error("end is required");
-  if (step === undefined)
-    console.log(
-      "FYI: Optional step parameter not provided. Remove this check once you've handled the optional step!"
-    );
+
+  return Array.from(
+    { length: (end - start) / step + 1 },
+    (_, index) => start + index * step
+  );
 };
 
 /**
@@ -55,6 +58,22 @@ export const createRange = (start, end, step) => {
 export const getScreentimeAlertList = (users, date) => {
   if (users === undefined) throw new Error("users is required");
   if (date === undefined) throw new Error("date is required");
+
+  const alertList = [];
+
+  users.forEach(user => {
+    user.screenTime.forEach(sTime => {
+      if (sTime.date === date) {
+        const totalUsage = Object.values(sTime.usage).reduce(
+          (total, time) => total + time
+        );
+
+        if (totalUsage > 100) alertList.push(user.username);
+      }
+    });
+  });
+
+  return alertList;
 };
 
 /**
@@ -67,8 +86,17 @@ export const getScreentimeAlertList = (users, date) => {
  * Hint: You will need to convert each hexadecimal value for R, G and B into its decimal equivalent!
  * @param {String} str
  */
-export const hexToRGB = (hexStr) => {
+export const hexToRGB = hexStr => {
   if (hexStr === undefined) throw new Error("hexStr is required");
+
+  if (hexStr.length === 4) {
+    hexStr = `#${hexStr[1]}${hexStr[1]}${hexStr[2]}${hexStr[2]}${hexStr[3]}${hexStr[3]}`;
+  }
+  const red = parseInt(hexStr.slice(1, 3), 16);
+  const green = parseInt(hexStr.slice(3, 5), 16);
+  const blue = parseInt(hexStr.slice(5, 7), 16);
+
+  return `rgb(${red},${green},${blue})`;
 };
 
 /**
@@ -81,6 +109,26 @@ export const hexToRGB = (hexStr) => {
  * The function should return "X" if player X has won, "0" if the player 0 has won, and null if there is currently no winner.
  * @param {Array} board
  */
-export const findWinner = (board) => {
+export const findWinner = board => {
   if (board === undefined) throw new Error("board is required");
+  const noughtOrCross = ["X", "0"];
+
+  for (let key of noughtOrCross) {
+    // check horisontal lines
+    for (let line of board) {
+      if (line.every(item => item === key)) return key;
+    }
+
+    // check vertical line
+    for (let i = 0; i < board[0].length - 1; i++) {
+      if (board.every(item => item[i] === key)) return key;
+    }
+
+    // check left-right diagonal
+    if (board.every((line, index) => line[index] === key)) return key;
+
+    // check right-left diagonal
+    if (board.every((line, index) => line[line.length - index - 1] === key))
+      return key;
+  }
 };
