@@ -4,8 +4,13 @@
  * @param {Array} arr
  * @returns {Number}
  */
-export const sumMultiples = (arr) => {
+export const sumMultiples = arr => {
   if (arr === undefined) throw new Error("arr is required");
+
+  return arr.reduce((acc, num) => {
+    if (num % 3 === 0 || num % 5 === 0) acc += num;
+    return acc;
+  }, 0);
 };
 
 /**
@@ -13,8 +18,14 @@ export const sumMultiples = (arr) => {
  * @param {String} str
  * @returns {Boolean}
  */
-export const isValidDNA = (str) => {
+export const isValidDNA = str => {
   if (str === undefined) throw new Error("str is required");
+
+  if (str === "") return false;
+
+  const validDNAChars = "CGTA";
+
+  return str.split("").every(char => validDNAChars.includes(char));
 };
 
 /**
@@ -22,8 +33,17 @@ export const isValidDNA = (str) => {
  * @param {String} str
  * @returns {String}
  */
-export const getComplementaryDNA = (str) => {
+export const getComplementaryDNA = str => {
   if (str === undefined) throw new Error("str is required");
+
+  if (!isValidDNA(str)) throw new Error("required a valid DNA string");
+
+  const complementary = { A: "T", T: "A", C: "G", G: "C" };
+
+  return str
+    .split("")
+    .map(item => complementary[item])
+    .join("");
 };
 
 /**
@@ -31,8 +51,16 @@ export const getComplementaryDNA = (str) => {
  * @param {Number} n
  * @returns {Boolean}
  */
-export const isItPrime = (n) => {
+export const isItPrime = n => {
   if (n === undefined) throw new Error("n is required");
+
+  for (let i = 2; i <= Math.sqrt(n); i++) {
+    if (n % i === 0) {
+      return false;
+    }
+  }
+
+  return n > 1;
 };
 
 /**
@@ -49,6 +77,13 @@ export const isItPrime = (n) => {
 export const createMatrix = (n, fill) => {
   if (n === undefined) throw new Error("n is required");
   if (fill === undefined) throw new Error("fill is required");
+
+  const matrix = [];
+  for (let i = 0; i < n; i++) {
+    matrix.push(new Array(n).fill(fill));
+  }
+
+  return matrix;
 };
 
 /**
@@ -66,4 +101,14 @@ export const createMatrix = (n, fill) => {
 export const areWeCovered = (staff, day) => {
   if (staff === undefined) throw new Error("staff is required");
   if (day === undefined) throw new Error("day is required");
+
+  if (staff.length === 0) return false;
+
+  return (
+    staff.reduce((acc, item) => {
+      if (item.rota.includes(day)) acc++;
+
+      return acc;
+    }, 0) > 2
+  );
 };
