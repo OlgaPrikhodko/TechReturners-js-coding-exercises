@@ -11,11 +11,6 @@ export const findNextNumber = (nums, n) => {
 export const count1sand0s = str => {
   if (str === undefined) throw new Error("str is required");
 
-  // return {
-  //   1: str.split("1").length - 1,
-  //   0: (str.match(/0/g) || []).length,
-  // };
-
   return str.split("").reduce(
     (acc, item) => {
       acc[Number(item)]++;
@@ -44,11 +39,6 @@ export const arrShift = arr => {
   [arr[0], arr[arr.length - 1]] = [arr[arr.length - 1], arr[0]];
 
   return arr;
-
-  // [1,2,3,4]
-  // const last = arr.pop();  //4, arr = [1,2,3]
-  // arr.push(arr[0]); // [1,2,3,1]
-  // arr[0] = last; [4,2,3,1]
 };
 
 export const findNeedle = (haystack, searchTerm) => {
