@@ -62,11 +62,13 @@ export function reverseAllWords(words) {
 
 export function countLinuxUsers(users) {
   if (users === undefined) throw new Error("users is required");
-  return users.reduce((countUsers, item) => {
-    if (item.type === "Linux") countUsers += 1;
 
-    return countUsers;
-  }, 0);
+  let countUsers = 0;
+  users.forEach(user => {
+    if (user.type === "Linux") countUsers += 1;
+  });
+
+  return countUsers;
 }
 
 export function getMeanScore(scores) {
