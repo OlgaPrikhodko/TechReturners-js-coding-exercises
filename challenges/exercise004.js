@@ -34,7 +34,6 @@ export function getSquareRoots(nums) {
 
   return nums.map(num => {
     const squareRoot = Math.sqrt(num);
-    if (Number.isInteger(squareRoot)) return squareRoot;
 
     return Number(squareRoot.toFixed(2));
   });
